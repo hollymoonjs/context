@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "outDir": "./dist",
+        "target": "ESNext",
+        "esModuleInterop": true,
+        "inlineSourceMap": false,
+        "lib": ["ESNext"],
+        "moduleResolution": "Bundler",
+        "skipLibCheck": true,
+        "strict": true,
+        "types": ["node"],
+        "experimentalDecorators": true,
+        "rootDir": "."
+    },
+    "compileOnSave": false,
+    "exclude": ["node_modules", "lib"],
+    "include": [
+        "01_basic"
+    ]
+}
