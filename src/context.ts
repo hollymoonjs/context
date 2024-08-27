@@ -22,7 +22,11 @@ export class ContextBuilder {
         return this;
     }
 
-    async withContext(fn: (context: Context) => Promise<void>): Promise<void> {
+    fork(): ContextBuilder {
+        return new ContextBuilder(...this.entryBuilders);
+    }
+
+    async build(): Promise<Context> {
         const entries = [];
 
         for (const entryBuilder of this.entryBuilders) {
@@ -31,7 +35,11 @@ export class ContextBuilder {
             entries.push(entry);
         }
 
-        const context = new Context(...entries);
+        return new Context(...entries);
+    }
+
+    async withContext(fn: (context: Context) => Promise<void>): Promise<void> {
+        const context = await this.build();
 
         await fn(context);
 
