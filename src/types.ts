@@ -4,16 +4,12 @@ export interface SymbolEntryKey<T> extends Symbol {}
 
 export interface EntryBuilder<T> {
     key: EntryKey<T>;
-    build: () => Promise<Entry<T>> | Entry<T>;
+    build: (context: Context) => Promise<Entry<T>> | Entry<T>;
 }
 
 export type EntryBuilderFunction<T> = (context: Context) => T | Promise<T>;
 
-export type EntryKey<T> =
-    | string
-    | SymbolEntryKey<T>
-    | EntryBuilder<T>
-    | EntryBuilderFunction<T>;
+export type EntryKey<T> = string | SymbolEntryKey<T> | EntryBuilder<T> | EntryBuilderFunction<T>;
 
 export interface Entry<T> {
     get: (context: Context) => Promise<T> | T;
