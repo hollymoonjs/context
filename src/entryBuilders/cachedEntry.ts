@@ -64,7 +64,7 @@ export function cachedEntry<T>(
                     }
 
                     if (options.close) {
-                        await options.close(context, entry.value as T);
+                        await options.close(context, (await entry.value) as T);
                     }
                 },
             };
