@@ -20,7 +20,7 @@
         "skipLibCheck": true,
         "strict": true,
         "traceResolution": false,
-        "types": ["node", "jest"],
+        "types": ["node"],
         "experimentalDecorators": true
     },
     "compileOnSave": false,
