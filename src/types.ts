@@ -1,4 +1,4 @@
-import type { Context } from "./context";
+import type { Context, ContextBuilder } from "./context";
 
 export interface SymbolEntryKey<T> extends Symbol {}
 
@@ -14,4 +14,5 @@ export type EntryKey<T> = string | SymbolEntryKey<T> | EntryBuilder<T> | EntryBu
 export interface Entry<T> {
     get: (context: Context) => Promise<T> | T;
     close?: (context: Context) => Promise<void> | void;
+    clone?: (currentContext: Context, target: ContextBuilder) => Promise<void> | void;
 }

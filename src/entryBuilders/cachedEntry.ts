@@ -1,9 +1,10 @@
-import { Context } from "../context";
+import { Context, ContextBuilder } from "../context";
 import { Entry, EntryBuilder, EntryBuilderFunction, EntryKey } from "../types";
 
 export interface CachedEntryOptions<T> {
     close?: (context: Context, value: T) => Promise<void> | void;
     eager?: boolean;
+    clone?: (currentContext: Context, target: ContextBuilder) => Promise<void> | void;
 }
 
 const defaultOptions: CachedEntryOptions<unknown> = {};
@@ -67,6 +68,7 @@ export function cachedEntry<T>(
                         await options.close(context, (await entry.value) as T);
                     }
                 },
+                clone: options.clone,
             };
 
             if (options.eager) {

@@ -1,3 +1,4 @@
+import { ContextBuilder } from "../context";
 import { Entry, EntryBuilder, EntryKey } from "../types";
 
 interface ValueEntry<T> extends Entry<T> {
@@ -11,6 +12,9 @@ export function valueEntry<T>(key: EntryKey<T>, value: T): EntryBuilder<T> {
             const entry: ValueEntry<T> = {
                 value,
                 get: () => entry.value,
+                clone: (currentContext, target) => {
+                    target.add(valueEntry(key, entry.value));
+                },
             };
 
             return entry;

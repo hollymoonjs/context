@@ -1,4 +1,4 @@
-import { ContextClosedError, ContextEntryNotFoundError } from "./errors";
+import { CloneNotSupportedError, ContextClosedError, ContextEntryNotFoundError } from "./errors";
 import { matchKey } from "./helpers";
 import { Entry, EntryBuilder, EntryKey } from "./types";
 
@@ -129,5 +129,34 @@ export class Context {
         }
 
         return new ContextBuilder(...forkedBuilders);
+    }
+
+    async clone(): Promise<ContextBuilder> {
+        if (this.closed) {
+            throw new ContextClosedError();
+        }
+
+        await this.initialize();
+
+        const target = new ContextBuilder();
+
+        for (const entry of this.entries) {
+            if (entry.clone) {
+                await entry.clone(this, target);
+            } else {
+                target.add({
+                    key: entry.key,
+                    build: async () => {
+                        return {
+                            get: async () => {
+                                throw new CloneNotSupportedError(entry.key);
+                            },
+                        };
+                    },
+                });
+            }
+        }
+
+        return target;
     }
 }

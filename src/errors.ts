@@ -14,3 +14,10 @@ export class ContextClosedError extends Error {
         this.name = "ContextClosedError";
     }
 }
+
+export class CloneNotSupportedError extends Error {
+    constructor(key: EntryKey<unknown>) {
+        super(`Clone not supported for entry: ${prettyName(key)}`);
+        this.name = "CloneNotSupportedError";
+    }
+}
