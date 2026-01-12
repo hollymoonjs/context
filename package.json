@@ -27,7 +27,7 @@
     "scripts": {
         "build": "tsdown",
         "check": "tsc --noEmit && attw --pack . && publint",
-        "lint": "eslint src",
+        "lint": "eslint .",
         "test": "vitest run",
         "test:watch": "vitest"
     },
