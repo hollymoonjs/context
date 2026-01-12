@@ -33,13 +33,13 @@ export function prettyName(key: EntryKey<unknown>): string {
         return key;
     }
 
-    if (key?.constructor?.name) {
+    if (key.constructor.name) {
         return key.constructor.name;
     }
 
     if (typeof key == "object") {
-        return `[anonymous]`;
+        return "[anonymous]";
     }
 
-    return `key`.toString();
+    return "[unknown]";
 }

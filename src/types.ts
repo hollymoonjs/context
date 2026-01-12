@@ -1,5 +1,6 @@
 import type { Context, ContextBuilder } from "./context";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unused-vars, @typescript-eslint/no-wrapper-object-types
 export interface SymbolEntryKey<T> extends Symbol {}
 
 export interface EntryBuilder<T> {

@@ -1,4 +1,3 @@
-import { ContextBuilder } from "../context";
 import { Entry, EntryBuilder, EntryKey } from "../types";
 
 interface ValueEntry<T> extends Entry<T> {

@@ -20,16 +20,16 @@ function parseArgs<T>(
     arg3?: CachedEntryOptions<T>
 ): [EntryKey<T>, EntryBuilderFunction<T>, CachedEntryOptions<T>] {
     if (arg3) {
-        return [arg1 as EntryKey<T>, arg2 as EntryBuilderFunction<T>, arg3];
+        return [arg1, arg2 as EntryBuilderFunction<T>, arg3];
     }
     if (arg2 && typeof arg2 === "function") {
-        return [arg1 as EntryKey<T>, arg2 as EntryBuilderFunction<T>, defaultOptions];
+        return [arg1, arg2, defaultOptions];
     }
     if (arg2 && typeof arg2 === "object") {
-        return [arg1 as EntryKey<T>, arg1 as EntryBuilderFunction<T>, arg2];
+        return [arg1, arg1 as EntryBuilderFunction<T>, arg2];
     }
 
-    return [arg1 as EntryKey<T>, arg1 as EntryBuilderFunction<T>, defaultOptions];
+    return [arg1, arg1 as EntryBuilderFunction<T>, defaultOptions];
 }
 
 export function cachedEntry<T>(
@@ -47,7 +47,7 @@ export function cachedEntry<T>(
 
     return {
         key,
-        build: async (context) => {
+        build: (context) => {
             const entry: CachedEntry<T> = {
                 value: undefined,
                 loaded: false,
@@ -72,7 +72,7 @@ export function cachedEntry<T>(
             };
 
             if (options.eager) {
-                entry.get(context);
+                void entry.get(context);
             }
 
             return entry;
