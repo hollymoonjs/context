@@ -123,6 +123,7 @@ export class Context {
             get: () => {
               return entry.get(this);
             },
+            clone: entry.clone,
           };
         },
       });

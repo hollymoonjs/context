@@ -78,4 +78,56 @@ describe("Context cloning", () => {
         await context.close();
         await clonedContext.close();
     });
+
+    it("should clone a forked context with inherited entry", async () => {
+        function MyEntry() {
+            return "value";
+        }
+
+        const parentBuilder = new ContextBuilder(
+            valueEntry(MyEntry, "parent value")
+        );
+        const parentContext = parentBuilder.build();
+
+        const forkedBuilder = parentContext.fork();
+        const forkedContext = forkedBuilder.build();
+
+        const clonedBuilder = await forkedContext.clone();
+        const clonedContext = clonedBuilder.build();
+
+        await forkedContext.close();
+        await parentContext.close();
+
+        const clonedResult = await clonedContext.get(MyEntry);
+        expect(clonedResult).toBe("parent value");
+
+        await clonedContext.close();
+    });
+
+    it("should clone a forked context with overridden entry", async () => {
+        function MyEntry() {
+            return "value";
+        }
+
+        const parentBuilder = new ContextBuilder(
+            valueEntry(MyEntry, "parent value")
+        );
+        const parentContext = parentBuilder.build();
+
+        const forkedBuilder = parentContext
+            .fork()
+            .add(valueEntry(MyEntry, "overridden value"));
+        const forkedContext = forkedBuilder.build();
+
+        const clonedBuilder = await forkedContext.clone();
+        const clonedContext = clonedBuilder.build();
+
+        await forkedContext.close();
+        await parentContext.close();
+
+        const clonedResult = await clonedContext.get(MyEntry);
+        expect(clonedResult).toBe("overridden value");
+
+        await clonedContext.close();
+    });
 });
