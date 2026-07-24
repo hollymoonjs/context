@@ -44,7 +44,7 @@ export interface EntryWithKey<T> extends Entry<T> {
 export class Context {
   private entryBuilders: EntryBuilder<unknown>[];
 
-  private initialized = false;
+  private initialization: Promise<void> | undefined;
   private entries: EntryWithKey<unknown>[] = [];
   private closed: boolean = false;
 
@@ -52,18 +52,18 @@ export class Context {
     this.entryBuilders = entryBuilders;
   }
 
-  private async initialize(): Promise<void> {
-    if (this.initialized) {
-      return;
+  private initialize(): Promise<void> {
+    if (!this.initialization) {
+      this.initialization = (async () => {
+        for (const entryBuilder of this.entryBuilders) {
+          const entry = (await entryBuilder.build(this)) as EntryWithKey<unknown>;
+          entry.key = entryBuilder.key;
+          this.entries.push(entry);
+        }
+      })();
     }
 
-    this.initialized = true;
-
-    for (const entryBuilder of this.entryBuilders) {
-      const entry = (await entryBuilder.build(this)) as EntryWithKey<unknown>;
-      entry.key = entryBuilder.key;
-      this.entries.push(entry);
-    }
+    return this.initialization;
   }
 
   private async getEntry<T>(key: EntryKey<T>): Promise<EntryWithKey<T>> {
